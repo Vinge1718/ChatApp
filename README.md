@@ -21,7 +21,7 @@ This repository contains code for the FriendlyChat project in the [Firebase in a
 - An emulator or a phone with developer options enabled and usb debugging enabled.
 
 ## Contributors
-- Udacity
+- [Udacity](https://classroom.udacity.com/me)
 - [Victor King'e](https://github.com/Vinge1718)
 
 ## License
