@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -91,7 +92,8 @@ public class MemeActivity extends AppCompatActivity {
             }
         });
     }
-
+//added a method with the re
+//quest parameters to the content provider and the cursor which is supposed to parse through the received data"
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data){
@@ -99,7 +101,10 @@ public class MemeActivity extends AppCompatActivity {
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
-            int collumn
+            int collumnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(collumnIndex);
+            cursor.close();
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
     }
 
