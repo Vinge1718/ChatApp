@@ -1,11 +1,14 @@
 package com.google.firebase.udacity.friendlychat;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 public class MemeActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSION_REQUEST = 1;
@@ -28,6 +34,8 @@ public class MemeActivity extends AppCompatActivity {
     TextView textView1, textView2;
     EditText editText1, editText2;
     ImageView imageView;
+
+    String currentImage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +79,18 @@ public class MemeActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                View content = findViewById(R.id.lay);
+                Bitmap bitmap = getScreenShot(content);
+                currentImage = "meme" + System.currentTimeMillis() + ".png";
+                store(bitmap, currentImage);
+                share.setEnabled(true);
             }
         });
 
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                shareImage(currentImage);
             }
         });
 
@@ -92,8 +104,58 @@ public class MemeActivity extends AppCompatActivity {
             }
         });
     }
+
+// fetch the screen shot and save it as a bitmap from the "cache enabled" state of the drawable content type.
+
+    public static Bitmap getScreenShot(View view){
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+        return bitmap;
+    }
+
+//  Come up with a storage method for the parsed imageFile.
+
+    public void store(Bitmap bm, String fileName){
+        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MEME";
+        File dir = new File(dirPath);
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+        File file = new File(dirPath, fileName);
+        try{
+            FileOutputStream fos =new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+            Toast.makeText(this,"Saved!", Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+            Toast.makeText(this,"Error Saving!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+// Use the uri (from the content provider side) to fetch an image an use "try"- block as a runtime check
+// This is works like in the same fashion as "resolve activity"
+
+    private void shareImage(String fileName){
+        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MEME";
+        Uri uri = Uri.fromFile(new File(dirPath, fileName));
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("images/*");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(Intent.EXTRA_TEXT, "");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+
+        try{
+            startActivity(Intent.createChooser(intent, "Share via"));
+        }catch (ActivityNotFoundException e){
+            Toast.makeText(this, "No Sharing App Found!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 //added a method with the re
-//quest parameters to the content provider and the cursor which is supposed to parse through the received data"
+//quest parameters to the content provider and the cursor which is supposed to parse through the received data, get the image, attach it to the imageview and enable the save button while keeping the share button disabled.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data){
