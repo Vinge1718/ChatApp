@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Friendly Chat</string>
+    <string name="app_name">Chat Room</string>
     <string name="sign_out">Sign Out</string>
     <string name="send_button_label">Send</string>
+    <string name="meme">Create Meme</string>
+    <string name="go">Generate Meme</string>
+
 </resources>
