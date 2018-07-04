@@ -101,10 +101,12 @@ public class MemeActivity extends AppCompatActivity {
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
-            int collumnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(collumnIndex);
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
             cursor.close();
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            save.setEnabled(true);
+            share.setEnabled(false);
         }
     }
 
