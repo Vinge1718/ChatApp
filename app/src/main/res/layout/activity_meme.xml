@@ -11,9 +11,7 @@
         android:id="@+id/tlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:orientation="vertical">
 
         <EditText
             android:layout_width="match_parent"
@@ -29,7 +27,7 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:id="@+id/go"
             android:text="TRY"
             android:layout_weight="1"/>
@@ -39,9 +37,7 @@
     <RelativeLayout
         android:id="@+id/lay"
         android:layout_width="match_parent"
-        android:layout_height="309dp"
-        android:layout_above="@+id/blay"
-        android:layout_below="@+id/tlay">
+        android:layout_height="309dp">
 
         <ImageView
             android:id="@+id/imageView"
@@ -56,6 +52,7 @@
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:textColor="#ffffff"
+            android:background="@color/transparent_black_4"
             android:textSize="40dp" />
 
         <EditText
@@ -65,6 +62,7 @@
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:textColor="#ffffff"
+            android:background="@color/transparent_black_4"
             android:textSize="40dp" />
     </RelativeLayout>
 
@@ -89,7 +87,7 @@
             android:text="SAVE" />
 
         <Button
-            android:id="@+id/load1"
+            android:id="@+id/load"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
